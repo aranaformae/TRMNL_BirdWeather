@@ -490,76 +490,79 @@
     }
   }
 
-  /* Full X portret: volledige breedte en maximaal zeven soorten. */
-  @container bwpanel (min-width: 600px) and (min-height: 850px) {
-    .bw-full {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      justify-content: flex-start;
-      gap: 14px;
-    }
-
-    .bw-full .bw-main,
-    .bw-full .bw-ranking {
-      width: 100%;
-      gap: 7px;
-    }
-
-    .bw-full .bw-hero {
-      grid-template-columns: 160px minmax(0, 1fr);
-      gap: 18px;
-    }
-
-    .bw-full .bw-photo {
-      width: 160px;
-      height: 130px;
-    }
-
-    .bw-full .bw-recent {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      padding-top: 6px;
-      border-top: 1px solid black;
-    }
-
-    .bw-full .bw-recent-list {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5px 16px;
-    }
-
-    .bw-full .bw-row {
-      grid-template-columns: auto 36px minmax(0, 1fr) auto;
-      gap: 8px;
-      padding: 4px 0;
-    }
-
-    .bw-full .bw-thumb {
-      display: block;
-      width: 36px;
-      height: 32px;
-      object-fit: contain;
-    }
-
-    .bw-full .bw-latin,
-    .bw-full .bw-share {
-      display: block;
-    }
-
-    .bw-full .bw-bar {
-      display: block;
-      height: 3px;
-      margin-top: 3px;
-      background: black;
-    }
-
-    .bw-full .bw-row.bw-after7,
-    .bw-full .bw-note {
-      display: none;
-    }
+ /* Full X portret: volledige breedte en alle tien soorten. */
+@container bwpanel (min-width: 600px) and (min-height: 850px) {
+  .bw-full {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 14px;
   }
+
+  .bw-full .bw-main,
+  .bw-full .bw-ranking {
+    width: 100%;
+    gap: 7px;
+  }
+
+  .bw-full .bw-hero {
+    grid-template-columns: 160px minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .bw-full .bw-photo {
+    width: 160px;
+    height: 130px;
+  }
+
+  .bw-full .bw-recent {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 6px;
+    border-top: 1px solid black;
+  }
+
+  .bw-full .bw-recent-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px 16px;
+  }
+
+  .bw-full .bw-row {
+    grid-template-columns: auto 36px minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 4px 0;
+  }
+
+  .bw-full .bw-thumb {
+    display: block;
+    width: 36px;
+    height: 32px;
+    object-fit: contain;
+  }
+
+  .bw-full .bw-latin,
+  .bw-full .bw-share {
+    display: block;
+  }
+
+  .bw-full .bw-bar {
+    display: block;
+    height: 3px;
+    margin-top: 3px;
+    background: black;
+  }
+
+  .bw-full .bw-row.bw-after7 {
+    display: grid;
+  }
+
+  .bw-full .bw-note {
+    display: block;
+  }
+}
 </style>
 
 <div class="layout bw-layout">
