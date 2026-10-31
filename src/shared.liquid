@@ -41,3 +41,744 @@
     {%- when 'recent_note' -%}{{- words[16] -}}
   {%- endcase -%}
 {% endtemplate %}
+
+{% template bw_screen %}
+{% assign settings = trmnl.plugin_settings.custom_fields_values %}
+{% assign language = settings.bird_language | default: 'nl' %}
+{% assign period_key = settings.period | default: 'day' %}
+{% assign last = latest_data.detections | first %}
+{% assign total = stats_data.detections | plus: 0 %}
+{% assign leader = species_data.species | first %}
+{% assign maximum = leader.detections.total | plus: 0 %}
+
+{% capture period_label %}{% render 'bw_text', language: language, key: period_key %}{% endcapture %}
+{% assign period_label = period_label | strip %}
+
+<style>
+  .bw-layout {
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .bw-stage {
+    container: bwpanel / size;
+    flex: 1 1 0;
+    align-self: stretch;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .bw-board {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    text-align: left;
+  }
+
+  .bw-main,
+  .bw-ranking {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+  }
+
+  .bw-heading {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .bw-hero {
+    display: grid;
+    grid-template-columns: 60px minmax(0, 1fr);
+    align-items: center;
+    gap: 9px;
+  }
+
+  .bw-photo {
+    display: block;
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+  }
+
+  .bw-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .bw-name {
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+  }
+
+  .bw-small {
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  .bw-scientific,
+  .bw-confidence {
+    display: none;
+  }
+
+  .bw-totals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding-top: 6px;
+    border-top: 1px solid black;
+  }
+
+  .bw-number {
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1.05;
+  }
+
+  .bw-ranking,
+  .bw-recent {
+    display: none;
+  }
+
+  .bw-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .bw-row {
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr) 48px;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 0;
+    border-bottom: 1px solid black;
+  }
+
+  .bw-species {
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .bw-count {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.15;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .bw-rank {
+    font-size: 11px;
+  }
+
+  .bw-thumb,
+  .bw-latin,
+  .bw-share,
+  .bw-bar,
+  .bw-note {
+    display: none;
+  }
+
+  .bw-row.bw-after3,
+  .bw-row.bw-after5,
+  .bw-row.bw-after7 {
+    display: none;
+  }
+
+  .bw-recent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .bw-recent-row {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 38px;
+    align-items: baseline;
+    gap: 7px;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  .bw-footer-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Hoge, smalle vlakken: bijvoorbeeld Quadrant in portret. */
+  @container bwpanel (min-height: 300px) {
+    .bw-ranking {
+      display: flex;
+    }
+
+    .bw-confidence {
+      display: block;
+    }
+
+    .bw-board {
+      gap: 12px;
+    }
+  }
+
+  /* Meer verticale ruimte: grotere foto en vijf topsoorten. */
+  @container bwpanel (min-height: 410px) {
+    .bw-hero {
+      grid-template-columns: 1fr;
+    }
+
+    .bw-photo {
+      width: 100%;
+      height: 110px;
+    }
+
+    .bw-name {
+      font-size: 24px;
+    }
+
+    .bw-scientific {
+      display: block;
+    }
+
+    .bw-row.bw-after3 {
+      display: grid;
+    }
+
+    .bw-main,
+    .bw-ranking {
+      gap: 9px;
+    }
+  }
+
+  /* Hoge halve schermen krijgen zeven topsoorten. */
+  @container bwpanel (min-height: 590px) {
+    .bw-photo {
+      height: 150px;
+    }
+
+    .bw-name {
+      font-size: 28px;
+    }
+
+    .bw-number {
+      font-size: 32px;
+    }
+
+    .bw-heading,
+    .bw-small {
+      font-size: 13px;
+    }
+
+    .bw-species,
+    .bw-count {
+      font-size: 16px;
+    }
+
+    .bw-row {
+      padding: 6px 0;
+    }
+
+    .bw-row.bw-after5 {
+      display: grid;
+    }
+  }
+
+  /* Brede, lage vlakken: Half horizontal op OG. */
+  @container bwpanel (min-width: 600px) {
+    .bw-board {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      align-content: center;
+      align-items: start;
+      gap: 18px;
+    }
+
+    .bw-ranking {
+      display: flex;
+    }
+
+    .bw-row.bw-after3 {
+      display: grid;
+    }
+
+    .bw-row {
+      padding: 3px 0;
+    }
+  }
+
+  /* Brede vlakken met genoeg hoogte: Full OG en X-portret. */
+  @container bwpanel (min-width: 600px) and (min-height: 340px) {
+    .bw-hero {
+      grid-template-columns: 1fr;
+    }
+
+    .bw-photo {
+      width: 100%;
+      height: 110px;
+    }
+
+    .bw-name {
+      font-size: 25px;
+    }
+
+    .bw-scientific,
+    .bw-confidence {
+      display: block;
+    }
+
+    .bw-row.bw-after5 {
+      display: grid;
+    }
+
+    .bw-full .bw-row.bw-after7 {
+      display: grid;
+    }
+
+    .bw-note {
+      display: block;
+    }
+  }
+
+  /* Brede X-weergaven: rijkere informatie en grotere tekst. */
+  @container bwpanel (min-width: 950px) and (min-height: 280px) {
+    .bw-board {
+      gap: 26px;
+    }
+
+    .bw-heading {
+      font-size: 14px;
+    }
+
+    .bw-hero {
+      grid-template-columns: 120px minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .bw-photo {
+      width: 120px;
+      height: 100px;
+    }
+
+    .bw-name {
+      font-size: 27px;
+    }
+
+    .bw-small {
+      font-size: 13px;
+    }
+
+    .bw-scientific,
+    .bw-confidence {
+      display: block;
+    }
+
+    .bw-number {
+      font-size: 32px;
+    }
+
+    .bw-row {
+      grid-template-columns: 20px minmax(0, 1fr) 58px;
+      padding: 5px 0;
+    }
+
+    .bw-species,
+    .bw-count {
+      font-size: 17px;
+    }
+
+    .bw-share {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+    }
+
+    .bw-row.bw-after5 {
+      display: grid;
+    }
+
+    .bw-recent {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding-top: 7px;
+      border-top: 1px solid black;
+    }
+  }
+
+  /* Full X in landschap. */
+  @container bwpanel (min-width: 950px) and (min-height: 500px) {
+    .bw-full .bw-hero {
+      grid-template-columns: 1fr;
+    }
+
+    .bw-full .bw-photo {
+      width: 100%;
+      height: 185px;
+    }
+
+    .bw-full .bw-name {
+      font-size: 34px;
+    }
+
+    .bw-full .bw-row {
+      grid-template-columns: 22px 44px minmax(0, 1fr) 65px;
+      gap: 9px;
+      padding: 5px 0;
+    }
+
+    .bw-full .bw-thumb {
+      display: block;
+      width: 44px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .bw-full .bw-latin {
+      display: block;
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .bw-full .bw-bar {
+      display: block;
+      height: 4px;
+      margin-top: 4px;
+      background: black;
+    }
+
+    .bw-full .bw-row.bw-after7 {
+      display: grid;
+    }
+  }
+
+  /* Full X in portret: grote vogelkaart boven de top 10. */
+  @container bwpanel (min-width: 600px) and (min-height: 850px) {
+    .bw-full {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .bw-full .bw-main {
+      gap: 14px;
+    }
+
+    .bw-full .bw-hero {
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 24px;
+    }
+
+    .bw-full .bw-photo {
+      width: 240px;
+      height: 220px;
+    }
+
+    .bw-full .bw-name {
+      font-size: 36px;
+    }
+
+    .bw-full .bw-heading {
+      font-size: 17px;
+    }
+
+    .bw-full .bw-small {
+      font-size: 16px;
+    }
+
+    .bw-full .bw-number {
+      font-size: 42px;
+    }
+
+    .bw-full .bw-ranking {
+      gap: 12px;
+    }
+
+    .bw-full .bw-row {
+      grid-template-columns: 26px 48px minmax(0, 1fr) 74px;
+      gap: 12px;
+      padding: 8px 0;
+    }
+
+    .bw-full .bw-thumb {
+      display: block;
+      width: 48px;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .bw-full .bw-species,
+    .bw-full .bw-count {
+      font-size: 22px;
+    }
+
+    .bw-full .bw-latin {
+      display: block;
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .bw-full .bw-share {
+      display: block;
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    .bw-full .bw-bar {
+      display: block;
+      height: 4px;
+      margin-top: 5px;
+      background: black;
+    }
+
+    .bw-full .bw-recent {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding-top: 10px;
+      border-top: 1px solid black;
+    }
+
+    .bw-full .bw-recent-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 20px;
+    }
+
+    .bw-full .bw-recent-row {
+      font-size: 14px;
+    }
+
+    .bw-full .bw-row.bw-after7 {
+      display: grid;
+    }
+  }
+
+  /* Hoge halve portretvlakken mogen alle tien soorten tonen. */
+  @container bwpanel (min-height: 850px) and (max-width: 599px) {
+    .bw-row.bw-after7 {
+      display: grid;
+    }
+
+    .bw-photo {
+      height: 190px;
+    }
+
+    .bw-board {
+      gap: 18px;
+    }
+
+    .bw-row {
+      padding: 8px 0;
+    }
+  }
+</style>
+
+<div class="layout bw-layout">
+  <div class="bw-stage">
+    {% if latest_data.success == true and species_data.success == true and stats_data.success == true %}
+
+      <div class="bw-board bw-{{ view }}">
+        <div class="bw-main">
+          <span class="bw-heading">
+            {% render 'bw_text', language: language, key: 'last' %}
+          </span>
+
+          {% if last %}
+            {% assign photo = last.species.imageUrl %}
+            {% if photo == blank %}
+              {% assign photo = last.species.thumbnailUrl %}
+            {% endif %}
+
+            <div class="bw-hero">
+              {% if photo != blank %}
+                <img
+                  src="{{ photo | escape }}"
+                  alt="{{ last.species.commonName | escape }}"
+                  class="image image-dither bw-photo"
+                >
+              {% else %}
+                <span></span>
+              {% endif %}
+
+              <div class="bw-details">
+                <span class="bw-name" data-clamp="2">
+                  {{ last.species.commonName | escape }}
+                </span>
+
+                <span class="bw-small bw-scientific" data-clamp="1">
+                  {{ last.species.scientificName | escape }}
+                </span>
+
+                <span class="bw-small">
+                  {{ last.timestamp | date: "%d-%m %H:%M %z" }}
+                </span>
+
+                {% if last.confidence != nil %}
+                  <span class="bw-small bw-confidence">
+                    {% render 'bw_text', language: language, key: 'confidence' %}:
+                    {{ last.confidence | times: 100 | round }}%
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+          {% else %}
+            <span class="bw-small">
+              {% render 'bw_text', language: language, key: 'empty' %}
+            </span>
+          {% endif %}
+
+          <div class="bw-totals">
+            <div>
+              <div class="bw-number">
+                {{ stats_data.species }}
+              </div>
+              <div class="bw-small">
+                {% render 'bw_text', language: language, key: 'species' %}
+                · {{ period_label | escape }}
+              </div>
+            </div>
+
+            <div>
+              <div class="bw-number">
+                {{ stats_data.detections }}
+              </div>
+              <div class="bw-small">
+                {% render 'bw_text', language: language, key: 'detections' %}
+                · {{ period_label | escape }}
+              </div>
+            </div>
+          </div>
+
+          <div class="bw-recent">
+            <span class="bw-heading">
+              {% render 'bw_text', language: language, key: 'recent' %} ·
+              {% render 'bw_text', language: language, key: 'confidence' %}
+            </span>
+
+            <div class="bw-recent-list">
+              {% for detection in latest_data.detections limit: 4 %}
+                <div class="bw-recent-row">
+                  <span>
+                    {{ detection.timestamp | date: "%H:%M" }}
+                  </span>
+
+                  <span data-clamp="1">
+                    {{ detection.species.commonName | escape }}
+                  </span>
+
+                  <span style="text-align: right;">
+                    {% if detection.confidence != nil %}
+                      {{ detection.confidence | times: 100 | round }}%
+                    {% else %}
+                      —
+                    {% endif %}
+                  </span>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="bw-ranking">
+          <span class="bw-heading">
+            {% render 'bw_text', language: language, key: 'top' %}
+            · {{ period_label | escape }}
+          </span>
+
+          <div class="bw-list">
+            {% for bird in species_data.species limit: 10 %}
+              {% assign count = bird.detections.total | plus: 0 %}
+              {% assign share = 0 %}
+              {% assign bar = 0 %}
+
+              {% if total > 0 %}
+                {% assign share = count | times: 100.0 | divided_by: total | round: 1 %}
+              {% endif %}
+
+              {% if maximum > 0 %}
+                {% assign bar = count | times: 100.0 | divided_by: maximum | round %}
+              {% endif %}
+
+              {% assign thumb = bird.thumbnailUrl %}
+              {% if thumb == blank %}
+                {% assign thumb = bird.imageUrl %}
+              {% endif %}
+
+              <div class="bw-row {% if forloop.index > 7 %}bw-after7{% elsif forloop.index > 5 %}bw-after5{% elsif forloop.index > 3 %}bw-after3{% endif %}">
+                <span class="bw-rank">
+                  {{ forloop.index }}
+                </span>
+
+                {% if thumb != blank %}
+                  <img
+                    src="{{ thumb | escape }}"
+                    alt="{{ bird.commonName | escape }}"
+                    class="image image-dither bw-thumb"
+                  >
+                {% else %}
+                  <span class="bw-thumb"></span>
+                {% endif %}
+
+                <div style="min-width: 0;">
+                  <span class="bw-species" data-clamp="1">
+                    {{ bird.commonName | escape }}
+                  </span>
+
+                  <span class="bw-latin" data-clamp="1">
+                    {{ bird.scientificName | escape }}
+                  </span>
+
+                  <div class="bw-bar" style="width: {{ bar }}%;"></div>
+                </div>
+
+                <div class="bw-count">
+                  {{ count }}×
+                  <span class="bw-share">{{ share }}%</span>
+                </div>
+              </div>
+            {% else %}
+              <span class="bw-small">
+                {% render 'bw_text', language: language, key: 'empty_period' %}
+              </span>
+            {% endfor %}
+          </div>
+
+          <span class="bw-small bw-note">
+            {% render 'bw_text', language: language, key: 'count_note' %}
+          </span>
+        </div>
+      </div>
+
+    {% else %}
+      <span class="description">
+        {% render 'bw_text', language: language, key: 'error' %}
+      </span>
+    {% endif %}
+  </div>
+</div>
+
+<div class="title_bar">
+  <span class="title bw-footer-name">
+    BirdWeather
+    {% if view == 'full' or view == 'horizontal' %}
+      · {{ settings.station_name | escape }}
+    {% endif %}
+  </span>
+  <span class="instance">{{ period_label | escape }}</span>
+</div>
+{% endtemplate %}
