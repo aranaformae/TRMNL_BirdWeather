@@ -86,4 +86,36 @@
       white-space: normal;
     }
   }
+  /* Alleen hoge, smalle quadranten, zoals X portret. */
+@container bwpanel (max-width: 449px) and (min-height: 410px) {
+  .bw-quadrant {
+    gap: 9px;
+  }
+
+  .bw-quadrant .bw-main {
+    gap: 6px;
+  }
+
+  .bw-quadrant .bw-hero {
+    grid-template-columns: 85px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .bw-quadrant .bw-photo {
+    width: 85px;
+    height: 85px;
+  }
+
+  .bw-quadrant .bw-confidence {
+    display: block;
+  }
+
+  .bw-quadrant .bw-totals {
+    padding-top: 6px;
+  }
+
+  .bw-quadrant .bw-row {
+    padding: 3px 0;
+  }
+}
 </style>
