@@ -1,0 +1,108 @@
+---
+strategy: polling
+no_screen_padding: 'no'
+dark_mode: 'no'
+static_data: ''
+polling_verb: get
+framework_version: 3.4.4
+serverless_language: ''
+refresh_interval_floor: '15'
+polling_url: "https://app.birdweather.com/api/v1/stations/{{ station_token | url_encode }}/detections?limit=8&classification=avian&locale={{ bird_language | default: 'nl' | url_encode }}\r\nhttps://app.birdweather.com/api/v1/stations/{{ station_token | url_encode }}/species?period={{ period | url_encode }}&limit=10&sort=top&order=desc&classification=avian&locale={{ bird_language | default: 'nl' | url_encode }}\r\nhttps://app.birdweather.com/api/v1/stations/{{ station_token | url_encode }}/stats?period={{ period | url_encode }}&classification=avian"
+polling_headers: ''
+polling_body: ''
+id: 526724
+oauth_enabled: 'false'
+oauth_pkce_enabled: 'no'
+custom_fields:
+- keyname: about
+  name: Over deze plugin
+  field_type: author_bio
+  category: nature,environment
+  email_address: trmnlsupport@afstudio.nl
+  description: Laatst gehoorde vogel, topsoorten en statistieken van je BirdWeather-station. Geen eigen server nodig. Aantallen zijn geluidsdetecties, geen individuele vogels. Soortfoto’s worden geleverd door BirdWeather. Onafhankelijke community-plugin. Ontwikkeld door Fabiën Schmitz.
+  name-en: About this plugin
+  description-en: Latest bird detected, top species and statistics from your BirdWeather station. No additional server required. Counts represent acoustic detections, not individual birds. Species images are supplied by BirdWeather. Independent community plugin. Developed by Fabiën Schmitz.
+  name-de: Über dieses Plugin
+  description-de: Zuletzt erkannter Vogel, häufigste Arten und Statistiken deiner BirdWeather-Station. Kein eigener Server erforderlich. Gezählt werden akustische Erkennungen, keine einzelnen Vögel. Die Artenbilder werden von BirdWeather bereitgestellt. Unabhängiges Community-Plugin. Entwickelt von Fabiën Schmitz.
+  name-fr: À propos de ce plugin
+  description-fr: Dernier oiseau détecté, espèces dominantes et statistiques de votre station BirdWeather. Aucun serveur supplémentaire. Les nombres représentent des détections acoustiques. Les images des espèces sont fournies par BirdWeather. Plugin communautaire indépendant. Développé par Fabiën Schmitz.
+  name-es: Acerca de este plugin
+  description-es: Última ave detectada, especies principales y estadísticas de tu estación BirdWeather. No requiere servidor adicional. Las cifras representan detecciones acústicas. Las imágenes de las especies son proporcionadas por BirdWeather. Plugin independiente de la comunidad. Desarrollado por Fabiën Schmitz.
+  name-it: Informazioni sul plugin
+  description-it: Ultimo uccello rilevato, specie principali e statistiche della tua stazione BirdWeather. Nessun server aggiuntivo. I numeri indicano rilevamenti acustici. Le immagini delle specie sono fornite da BirdWeather. Plugin indipendente della community. Sviluppato da Fabiën Schmitz.
+- keyname: station_token
+  name: BirdWeather station-ID of token
+  name-en: BirdWeather station ID or token
+  name-de: BirdWeather-Stations-ID oder Token
+  name-fr: Identifiant ou jeton de station BirdWeather
+  name-es: ID o token de estación BirdWeather
+  name-it: ID o token della stazione BirdWeather
+  field_type: string
+  placeholder: '12345'
+  description: Vul je BirdWeather station-ID in, bijvoorbeeld 24777, of je station-API-token. Gebruik bij een toegangsprobleem je stationtoken. TRMNL gebruikt deze waarde om gegevens rechtstreeks bij BirdWeather op te halen. Gebruik geen accountwachtwoord of administrator-token.
+  description-en: Enter your BirdWeather station ID, for example 24777, or your station API token. If access fails, use your station token. TRMNL uses this value to fetch data directly from BirdWeather. Do not use an account password or administrator token.
+  description-de: Gib deine BirdWeather-Stations-ID ein, zum Beispiel 24777, oder dein Stations-API-Token. Falls der Zugriff fehlschlägt, verwende dein Station-Token. TRMNL ruft damit Daten direkt von BirdWeather ab. Kein Kontopasswort oder Administrator-Token verwenden.
+  description-fr: Saisissez votre identifiant de station BirdWeather, par exemple 24777, ou votre jeton API de station. En cas de problème d’accès, utilisez le jeton de station. TRMNL utilise cette valeur pour récupérer les données directement auprès de BirdWeather. N’utilisez pas de mot de passe ou de jeton administrateur.
+  description-es: Introduce el ID de tu estación BirdWeather, por ejemplo 24777, o su token API. Si falla el acceso, utiliza el token de la estación. TRMNL usa este valor para obtener los datos directamente de BirdWeather. No uses una contraseña ni un token de administrador.
+  description-it: Inserisci l’ID della tua stazione BirdWeather, ad esempio 24777, oppure il token API della stazione. Se l’accesso non riesce, usa il token della stazione. TRMNL usa questo valore per ottenere i dati direttamente da BirdWeather. Non usare una password o un token amministratore.
+- keyname: station_name
+  name: Stationsnaam
+  name-en: Station name
+  name-de: Stationsname
+  name-fr: Nom de la station
+  name-es: Nombre de la estación
+  name-it: Nome della stazione
+  field_type: string
+  default: BirdWeather
+  maxlength: 40
+  description: Naam die op het scherm wordt weergegeven.
+  description-en: Name displayed on the screen.
+  description-de: Name, der auf dem Bildschirm angezeigt wird.
+  description-fr: Nom affiché à l’écran.
+  description-es: Nombre que aparece en la pantalla.
+  description-it: Nome visualizzato sullo schermo.
+- keyname: period
+  name: Periode voor topsoorten en totalen
+  name-en: Period for top species and totals
+  name-de: Zeitraum für häufigste Arten und Gesamtzahlen
+  name-fr: Période des espèces dominantes et des totaux
+  name-es: Periodo de especies principales y totales
+  name-it: Periodo delle specie principali e dei totali
+  field_type: select
+  default: day
+  options:
+  - Dag / Day: day
+  - Week: week
+  - Maand / Month: month
+  - Alles / All: all
+  description: De laatste detectie staat los van deze periode.
+  description-en: The latest detection is independent of this period.
+  description-de: Die letzte Erkennung ist unabhängig von diesem Zeitraum.
+  description-fr: La dernière détection est indépendante de cette période.
+  description-es: La última detección es independiente de este periodo.
+  description-it: L’ultimo rilevamento è indipendente da questo periodo.
+- keyname: bird_language
+  name: Taal van vogelnamen en scherm
+  name-en: Bird names and screen language
+  name-de: Sprache der Vogelnamen und Anzeige
+  name-fr: Langue des oiseaux et de l’affichage
+  name-es: Idioma de las aves y de la pantalla
+  name-it: Lingua degli uccelli e dello schermo
+  field_type: select
+  default: nl
+  options:
+  - Nederlands: nl
+  - English: en
+  - Deutsch: de
+  - Français: fr
+  - Español: es
+  - Italiano: it
+  description: Bepaalt de schermteksten en de taal die bij BirdWeather wordt opgevraagd. Ontbrekende soortvertalingen kunnen in de standaardtaal verschijnen.
+  description-en: Sets the screen text and the language requested from BirdWeather. Missing species translations may appear in the default language.
+  description-de: Bestimmt die Anzeigesprache und die bei BirdWeather angefragte Sprache. Fehlende Artübersetzungen können in der Standardsprache erscheinen.
+  description-fr: Définit la langue de l’affichage et celle demandée à BirdWeather. Les traductions manquantes peuvent apparaître dans la langue par défaut.
+  description-es: Define el idioma de la pantalla y el solicitado a BirdWeather. Las traducciones que falten pueden aparecer en el idioma predeterminado.
+  description-it: Imposta la lingua dello schermo e quella richiesta a BirdWeather. Le traduzioni mancanti possono apparire nella lingua predefinita.
+name: BirdWeather
+description: BirdWeather detections
+refresh_interval: 15
