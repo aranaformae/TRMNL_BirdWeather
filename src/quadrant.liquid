@@ -5,3 +5,85 @@
   stats_data: IDX_2,
   view: 'quadrant'
 %}
+
+<style>
+  .bw-quadrant {
+    gap: 5px;
+  }
+
+  .bw-quadrant .bw-main,
+  .bw-quadrant .bw-ranking,
+  .bw-quadrant .bw-details {
+    gap: 3px;
+  }
+
+  .bw-quadrant .bw-hero {
+    grid-template-columns: 52px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+  }
+
+  .bw-quadrant .bw-photo {
+    width: 52px;
+    height: 48px;
+    object-fit: contain;
+  }
+
+  .bw-quadrant .bw-name {
+    -webkit-line-clamp: 2;
+  }
+
+  .bw-quadrant .bw-scientific,
+  .bw-quadrant .bw-confidence,
+  .bw-quadrant .bw-recent,
+  .bw-quadrant .bw-note,
+  .bw-quadrant .bw-latin,
+  .bw-quadrant .bw-share {
+    display: none;
+  }
+
+  .bw-quadrant .bw-totals {
+    gap: 8px;
+    padding-top: 4px;
+  }
+
+  .bw-quadrant .bw-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 6px;
+    padding: 1px 0;
+  }
+
+  .bw-quadrant .bw-species {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bw-quadrant .bw-row.bw-after3,
+  .bw-quadrant .bw-row.bw-after5,
+  .bw-quadrant .bw-row.bw-after7 {
+    display: none;
+  }
+
+  /* Vijf soorten op een voldoende breed X-quadrant. */
+  @container bwpanel (min-width: 450px) and (min-height: 300px) {
+    .bw-quadrant .bw-row.bw-after3 {
+      display: grid;
+    }
+  }
+
+  /* Hoog, smal X-quadrant in portret. */
+  @container bwpanel (max-width: 449px) and (min-height: 410px) {
+    .bw-quadrant .bw-row.bw-after3 {
+      display: grid;
+    }
+
+    .bw-quadrant .bw-species {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      white-space: normal;
+    }
+  }
+</style>
