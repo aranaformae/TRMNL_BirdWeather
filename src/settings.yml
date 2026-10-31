@@ -19,17 +19,17 @@ custom_fields:
   field_type: author_bio
   category: nature,environment
   email_address: trmnlsupport@afstudio.nl
-  description: Laatst gehoorde vogel, topsoorten en statistieken van je BirdWeather-station. Geen eigen server nodig. Aantallen zijn geluidsdetecties, geen individuele vogels. Soortfoto’s worden geleverd door BirdWeather. Onafhankelijke community-plugin. Ontwikkeld door Fabiën Schmitz.
+  description: Laatst gehoorde vogel, topsoorten en statistieken van je BirdWeather-station. Geen eigen server nodig. Aantallen zijn geluidsdetecties, geen individuele vogels. Vogelgegevens en soortafbeeldingen via <a href="https://www.birdweather.com/">BirdWeather</a>. Afbeeldingsrechten blijven bij de oorspronkelijke rechthebbenden. <br/><br/> Onafhankelijke community-plugin. Ontwikkeld door Fabiën Schmitz.
   name-en: About this plugin
-  description-en: Latest bird detected, top species and statistics from your BirdWeather station. No additional server required. Counts represent acoustic detections, not individual birds. Species images are supplied by BirdWeather. Independent community plugin. Developed by Fabiën Schmitz.
+  description-en: Latest bird detected, top species and statistics from your BirdWeather station. No additional server required. Counts represent acoustic detections, not individual birds. Bird data and species images via <a href="https://www.birdweather.com/">BirdWeather</a>. Image rights remain with their respective owners. <br/><br/> Independent community plugin. Developed by Fabiën Schmitz.
   name-de: Über dieses Plugin
-  description-de: Zuletzt erkannter Vogel, häufigste Arten und Statistiken deiner BirdWeather-Station. Kein eigener Server erforderlich. Gezählt werden akustische Erkennungen, keine einzelnen Vögel. Die Artenbilder werden von BirdWeather bereitgestellt. Unabhängiges Community-Plugin. Entwickelt von Fabiën Schmitz.
+  description-de: Zuletzt erkannter Vogel, häufigste Arten und Statistiken deiner BirdWeather-Station. Kein eigener Server erforderlich. Gezählt werden akustische Erkennungen, keine einzelnen Vögel. Vogeldaten und Artenbilder über <a href="https://www.birdweather.com/">BirdWeather</a>. Die Bildrechte verbleiben bei den jeweiligen Rechteinhabern. <br/><br/> Unabhängiges Community-Plugin. Entwickelt von Fabiën Schmitz.
   name-fr: À propos de ce plugin
-  description-fr: Dernier oiseau détecté, espèces dominantes et statistiques de votre station BirdWeather. Aucun serveur supplémentaire. Les nombres représentent des détections acoustiques. Les images des espèces sont fournies par BirdWeather. Plugin communautaire indépendant. Développé par Fabiën Schmitz.
+  description-fr: Dernier oiseau détecté, espèces dominantes et statistiques de votre station BirdWeather. Aucun serveur supplémentaire. Les nombres représentent des détections acoustiques. Données sur les oiseaux et images des espèces via <a href="https://www.birdweather.com/">BirdWeather</a>. Les droits des images restent à leurs titulaires respectifs. <br/><br/> Plugin communautaire indépendant. Développé par Fabiën Schmitz.
   name-es: Acerca de este plugin
-  description-es: Última ave detectada, especies principales y estadísticas de tu estación BirdWeather. No requiere servidor adicional. Las cifras representan detecciones acústicas. Las imágenes de las especies son proporcionadas por BirdWeather. Plugin independiente de la comunidad. Desarrollado por Fabiën Schmitz.
+  description-es: Última ave detectada, especies principales y estadísticas de tu estación BirdWeather. No requiere servidor adicional. Las cifras representan detecciones acústicas. Datos de aves e imágenes de especies a través de <a href="https://www.birdweather.com/">BirdWeather</a>. Los derechos de las imágenes pertenecen a sus respectivos titulares. <br/><br/> Plugin independiente de la comunidad. Desarrollado por Fabiën Schmitz.
   name-it: Informazioni sul plugin
-  description-it: Ultimo uccello rilevato, specie principali e statistiche della tua stazione BirdWeather. Nessun server aggiuntivo. I numeri indicano rilevamenti acustici. Le immagini delle specie sono fornite da BirdWeather. Plugin indipendente della community. Sviluppato da Fabiën Schmitz.
+  description-it: Ultimo uccello rilevato, specie principali e statistiche della tua stazione BirdWeather. Nessun server aggiuntivo. I numeri indicano rilevamenti acustici. Dati sugli uccelli e immagini delle specie tramite <a href="https://www.birdweather.com/">BirdWeather</a>. I diritti delle immagini restano ai rispettivi titolari. <br/><br/> Plugin indipendente della community. Sviluppato da Fabiën Schmitz.
 - keyname: station_token
   name: BirdWeather station-ID of token
   name-en: BirdWeather station ID or token
