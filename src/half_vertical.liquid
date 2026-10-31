@@ -1,0 +1,238 @@
+{% assign last = IDX_0.detections | first %}
+{% assign settings = trmnl.plugin_settings.custom_fields_values %}
+{% assign language = settings.bird_language | default: 'nl' %}
+{% assign period_key = settings.period | default: 'day' %}
+{% capture period_label %}{% render 'bw_text', language: language, key: period_key %}{% endcapture %}
+{% assign period_label = period_label | strip %}
+
+<style>
+  .bwv {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+    text-align: left;
+  }
+  .bwv-heading {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .bwv-hero {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+  }
+  .bwv-photo {
+    display: block;
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+  }
+  .bwv-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .bwv-name {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+  }
+  .bwv-small {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+  .bwv-scientific, .bwv-top5 {
+    display: none;
+  }
+  .bwv-totals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 8px 0;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+  }
+  .bwv-number {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .bwv-row {
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr) 48px;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 0;
+    border-bottom: 1px solid black;
+  }
+  .bwv-species {
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .bwv-count {
+    font-size: 14px;
+    font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .bwv-row.bwv-extra {
+    display: none;
+  }
+  @media (min-height: 600px) {
+    .bwv {
+      gap: 12px;
+    }
+    .bwv-hero {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .bwv-photo {
+      width: 100%;
+      height: 150px;
+    }
+    .bwv-name {
+      font-size: 30px;
+    }
+    .bwv-scientific {
+      display: block;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+    .bwv-heading, .bwv-small {
+      font-size: 14px;
+    }
+    .bwv-number {
+      font-size: 32px;
+    }
+    .bwv-row {
+      padding: 8px 0;
+    }
+    .bwv-species, .bwv-count {
+      font-size: 17px;
+    }
+    .bwv-row.bwv-extra {
+      display: grid;
+    }
+    .bwv-top3 {
+      display: none;
+    }
+    .bwv-top5 {
+      display: inline;
+    }
+  }
+</style>
+
+<div class="layout layout--col">
+  {% if IDX_0.success == true and IDX_1.success == true and IDX_2.success == true %}
+    <div class="bwv">
+      <span class="bwv-heading">
+        {% render 'bw_text', language: language, key: 'last' %}
+      </span>
+
+      {% if last %}
+        {% assign photo = last.species.imageUrl %}
+        {% if photo == blank %}
+          {% assign photo = last.species.thumbnailUrl %}
+        {% endif %}
+
+        <div class="bwv-hero">
+          {% if photo != blank %}
+            <img
+              src="{{ photo | escape }}"
+              alt="{{ last.species.commonName | escape }}"
+              class="image image-dither bwv-photo"
+            >
+          {% else %}
+            <span></span>
+          {% endif %}
+
+          <div class="bwv-details">
+            <span class="bwv-name" data-clamp="2">
+              {{ last.species.commonName | escape }}
+            </span>
+
+            <span class="bwv-scientific" data-clamp="1">
+              {{ last.species.scientificName | escape }}
+            </span>
+
+            <span class="bwv-small">
+              {{ last.timestamp | date: "%d-%m %H:%M %z" }}
+            </span>
+
+            {% if last.confidence != nil %}
+              <span class="bwv-small">
+                {% render 'bw_text', language: language, key: 'confidence' %}:
+                {{ last.confidence | times: 100 | round }}%
+              </span>
+            {% endif %}
+          </div>
+        </div>
+      {% else %}
+        <span class="bwv-small">
+          {% render 'bw_text', language: language, key: 'empty' %}
+        </span>
+      {% endif %}
+
+      <span class="bwv-heading">
+        {{ period_label | escape }} ·
+        {% render 'bw_text', language: language, key: 'totals' %}
+      </span>
+
+      <div class="bwv-totals">
+        <div>
+          <div class="bwv-number">{{ IDX_2.species }}</div>
+          <div class="bwv-small">
+            {% render 'bw_text', language: language, key: 'species' %}
+          </div>
+        </div>
+        <div>
+          <div class="bwv-number">{{ IDX_2.detections }}</div>
+          <div class="bwv-small">
+            {% render 'bw_text', language: language, key: 'detections' %}
+          </div>
+        </div>
+      </div>
+
+      <span class="bwv-heading">
+        {% render 'bw_text', language: language, key: 'top' %} ·
+        <span class="bwv-top3">3</span>
+        <span class="bwv-top5">5</span>
+      </span>
+
+      <div>
+        {% for bird in IDX_1.species limit: 5 %}
+          <div class="bwv-row {% if forloop.index > 3 %}bwv-extra{% endif %}">
+            <span class="bwv-small">{{ forloop.index }}</span>
+            <span class="bwv-species" data-clamp="1">
+              {{ bird.commonName | escape }}
+            </span>
+            <span class="bwv-count">
+              {{ bird.detections.total }}×
+            </span>
+          </div>
+        {% else %}
+          <span class="bwv-small">
+            {% render 'bw_text', language: language, key: 'empty_period' %}
+          </span>
+        {% endfor %}
+      </div>
+    </div>
+  {% else %}
+    <span class="description">
+      {% render 'bw_text', language: language, key: 'error' %}
+    </span>
+  {% endif %}
+</div>
+
+<div class="title_bar">
+  <span class="title">BirdWeather</span>
+  <span class="instance">{{ period_label | escape }}</span>
+</div>

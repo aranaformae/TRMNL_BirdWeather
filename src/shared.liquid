@@ -1,0 +1,43 @@
+{% template bw_text %}
+  {%- assign language = language | default: 'nl' -%}
+
+  {%- case language -%}
+    {%- when 'en' -%}
+      {%- assign words = 'LAST HEARD|Species|Detections|Confidence|RECENT|TOP SPECIES|TOTALS|Day|Week|Month|All|No bird detections yet.|No detections in this period.|BirdWeather unavailable. Check your station token.|Counts are acoustic detections.|Bird detections|Independent of the selected statistics period.' | split: '|' -%}
+
+    {%- when 'de' -%}
+      {%- assign words = 'ZULETZT GEHÖRT|Arten|Erkennungen|Konfidenz|ZULETZT|HÄUFIGSTE ARTEN|GESAMT|Tag|Woche|Monat|Alle|Noch keine Vogelerkennungen.|Keine Erkennungen in diesem Zeitraum.|BirdWeather nicht verfügbar. Station-Token prüfen.|Gezählt werden akustische Erkennungen.|Vogelerkennungen|Unabhängig vom gewählten Statistikzeitraum.' | split: '|' -%}
+
+    {%- when 'fr' -%}
+      {%- assign words = 'DERNIER OISEAU ENTENDU|Espèces|Détections|Confiance|RÉCENTES|ESPÈCES DOMINANTES|TOTAUX|Jour|Semaine|Mois|Tout|Aucune détection pour le moment.|Aucune détection sur cette période.|BirdWeather indisponible. Vérifiez le jeton de la station.|Les nombres représentent des détections acoustiques.|Détections d’oiseaux|Indépendamment de la période statistique choisie.' | split: '|' -%}
+
+    {%- when 'es' -%}
+      {%- assign words = 'ÚLTIMA AVE OÍDA|Especies|Detecciones|Confianza|RECIENTES|ESPECIES PRINCIPALES|TOTALES|Día|Semana|Mes|Todo|Todavía no hay detecciones.|Sin detecciones en este periodo.|BirdWeather no disponible. Comprueba el token de la estación.|Las cifras son detecciones acústicas.|Detecciones de aves|Independientemente del periodo estadístico seleccionado.' | split: '|' -%}
+
+    {%- when 'it' -%}
+      {%- assign words = 'ULTIMO UCCELLO SENTITO|Specie|Rilevamenti|Affidabilità|RECENTI|SPECIE PRINCIPALI|TOTALI|Giorno|Settimana|Mese|Tutto|Nessun rilevamento per ora.|Nessun rilevamento in questo periodo.|BirdWeather non disponibile. Controlla il token della stazione.|I numeri indicano rilevamenti acustici.|Rilevamenti di uccelli|Indipendentemente dal periodo statistico selezionato.' | split: '|' -%}
+
+    {%- else -%}
+      {%- assign words = 'LAATST GEHOORD|Soorten|Detecties|Zekerheid|RECENT|TOPSOORTEN|TOTALEN|Dag|Week|Maand|Alles|Nog geen vogeldetecties.|Geen detecties in deze periode.|BirdWeather niet beschikbaar. Controleer je stationtoken.|Aantallen zijn geluidsdetecties.|Vogeldetecties|Los van de gekozen statistiekperiode.' | split: '|' -%}
+  {%- endcase -%}
+
+  {%- case key -%}
+    {%- when 'last' -%}{{- words[0] -}}
+    {%- when 'species' -%}{{- words[1] -}}
+    {%- when 'detections' -%}{{- words[2] -}}
+    {%- when 'confidence' -%}{{- words[3] -}}
+    {%- when 'recent' -%}{{- words[4] -}}
+    {%- when 'top' -%}{{- words[5] -}}
+    {%- when 'totals' -%}{{- words[6] -}}
+    {%- when 'day' -%}{{- words[7] -}}
+    {%- when 'week' -%}{{- words[8] -}}
+    {%- when 'month' -%}{{- words[9] -}}
+    {%- when 'all' -%}{{- words[10] -}}
+    {%- when 'empty' -%}{{- words[11] -}}
+    {%- when 'empty_period' -%}{{- words[12] -}}
+    {%- when 'error' -%}{{- words[13] -}}
+    {%- when 'count_note' -%}{{- words[14] -}}
+    {%- when 'bird_detections' -%}{{- words[15] -}}
+    {%- when 'recent_note' -%}{{- words[16] -}}
+  {%- endcase -%}
+{% endtemplate %}

@@ -1,0 +1,320 @@
+{% assign last = IDX_0.detections | first %}
+{% assign settings = trmnl.plugin_settings.custom_fields_values %}
+{% assign language = settings.bird_language | default: 'nl' %}
+{% assign period_key = settings.period | default: 'day' %}
+{% capture period_label %}{% render 'bw_text', language: language, key: period_key %}{% endcapture %}
+{% assign period_label = period_label | strip %}
+
+<style>
+  .bwf {
+    display: grid;
+    grid-template-columns: 0.95fr 1.15fr;
+    gap: 20px;
+    width: 100%;
+    min-width: 0;
+    text-align: left;
+  }
+  .bwf-left, .bwf-right {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+  .bwf-heading {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .bwf-photo {
+    display: block;
+    width: 100%;
+    height: 115px;
+    object-fit: contain;
+  }
+  .bwf-name {
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+  }
+  .bwf-small {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+  .bwf-totals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding-top: 8px;
+    border-top: 1px solid black;
+  }
+  .bwf-number {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .bwf-row {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr) 48px;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    border-bottom: 1px solid black;
+  }
+  .bwf-species {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.15;
+    min-width: 0;
+  }
+  .bwf-count {
+    font-size: 15px;
+    font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .bwf-thumb, .bwf-scientific,
+  .bwf-bar, .bwf-share, .bwf-recent {
+    display: none;
+  }
+  @media (min-width: 1000px) {
+    .bwf {
+      gap: 28px;
+    }
+    .bwf-left, .bwf-right {
+      gap: 10px;
+    }
+    .bwf-photo {
+      height: 190px;
+    }
+    .bwf-name {
+      font-size: 34px;
+    }
+    .bwf-heading, .bwf-small {
+      font-size: 14px;
+    }
+    .bwf-number {
+      font-size: 36px;
+    }
+    .bwf-row {
+      grid-template-columns: 22px 48px minmax(0, 1fr) 64px;
+      gap: 10px;
+      padding: 5px 0;
+    }
+    .bwf-thumb {
+      display: block;
+      width: 48px;
+      height: 42px;
+      object-fit: contain;
+    }
+    .bwf-species {
+      font-size: 19px;
+    }
+    .bwf-scientific {
+      display: block;
+      font-size: 12px;
+      line-height: 1.2;
+    }
+    .bwf-count {
+      font-size: 21px;
+    }
+    .bwf-share {
+      display: block;
+      font-size: 12px;
+      font-weight: 400;
+    }
+    .bwf-bar {
+      display: block;
+      height: 4px;
+      margin-top: 5px;
+      background: black;
+    }
+    .bwf-recent {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding-top: 8px;
+      border-top: 1px solid black;
+    }
+    .bwf-recent-row {
+      display: grid;
+      grid-template-columns: 45px minmax(0, 1fr) 40px;
+      gap: 8px;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+  }
+</style>
+
+<div class="layout layout--col">
+  {% if IDX_0.success == true and IDX_1.success == true and IDX_2.success == true %}
+    <div class="bwf">
+      <div class="bwf-left">
+        <span class="bwf-heading">
+          {% render 'bw_text', language: language, key: 'last' %}
+        </span>
+
+        {% if last %}
+          {% assign photo = last.species.imageUrl %}
+          {% if photo == blank %}
+            {% assign photo = last.species.thumbnailUrl %}
+          {% endif %}
+
+          {% if photo != blank %}
+            <img
+              src="{{ photo | escape }}"
+              alt="{{ last.species.commonName | escape }}"
+              class="image image-dither bwf-photo"
+            >
+          {% endif %}
+
+          <span class="bwf-name" data-clamp="2">
+            {{ last.species.commonName | escape }}
+          </span>
+
+          <span class="bwf-small" data-clamp="1">
+            {{ last.species.scientificName | escape }}
+          </span>
+
+          <span class="bwf-small">
+            {{ last.timestamp | date: "%d-%m-%Y %H:%M %z" }}
+          </span>
+
+          {% if last.confidence != nil %}
+            <span class="bwf-small">
+              {% render 'bw_text', language: language, key: 'confidence' %}:
+              {{ last.confidence | times: 100 | round }}%
+            </span>
+          {% endif %}
+        {% else %}
+          <span class="bwf-small">
+            {% render 'bw_text', language: language, key: 'empty' %}
+          </span>
+        {% endif %}
+
+        <span class="bwf-heading">
+          {{ period_label | escape }} ·
+          {% render 'bw_text', language: language, key: 'totals' %}
+        </span>
+
+        <div class="bwf-totals">
+          <div>
+            <div class="bwf-number">{{ IDX_2.species }}</div>
+            <div class="bwf-small">
+              {% render 'bw_text', language: language, key: 'species' %}
+            </div>
+          </div>
+          <div>
+            <div class="bwf-number">{{ IDX_2.detections }}</div>
+            <div class="bwf-small">
+              {% render 'bw_text', language: language, key: 'detections' %}
+            </div>
+          </div>
+        </div>
+
+        <div class="bwf-recent">
+          <span class="bwf-heading">
+            {% render 'bw_text', language: language, key: 'recent' %} ·
+            {% render 'bw_text', language: language, key: 'confidence' %}
+          </span>
+
+          {% for detection in IDX_0.detections limit: 6 %}
+            <div class="bwf-recent-row">
+              <span>{{ detection.timestamp | date: "%H:%M" }}</span>
+              <span data-clamp="1">
+                {{ detection.species.commonName | escape }}
+              </span>
+              <span style="text-align: right;">
+                {% if detection.confidence != nil %}
+                  {{ detection.confidence | times: 100 | round }}%
+                {% else %}
+                  —
+                {% endif %}
+              </span>
+            </div>
+          {% endfor %}
+
+          <span class="bwf-small">
+            {% render 'bw_text', language: language, key: 'recent_note' %}
+          </span>
+        </div>
+      </div>
+
+      <div class="bwf-right">
+        <span class="bwf-heading">
+          {% render 'bw_text', language: language, key: 'top' %} · 10 ·
+          {{ period_label | escape }}
+        </span>
+
+        {% assign leader = IDX_1.species | first %}
+        {% assign max_count = leader.detections.total | plus: 0 %}
+        {% assign total = IDX_2.detections | plus: 0 %}
+
+        {% for bird in IDX_1.species limit: 10 %}
+          {% assign count = bird.detections.total | plus: 0 %}
+          {% assign bar_width = 0 %}
+          {% assign share = 0 %}
+          {% if max_count > 0 %}
+            {% assign bar_width = count | times: 100.0 | divided_by: max_count | round %}
+          {% endif %}
+          {% if total > 0 %}
+            {% assign share = count | times: 100.0 | divided_by: total | round: 1 %}
+          {% endif %}
+
+          {% assign thumbnail = bird.thumbnailUrl %}
+          {% if thumbnail == blank %}
+            {% assign thumbnail = bird.imageUrl %}
+          {% endif %}
+
+          <div class="bwf-row">
+            <span class="bwf-small">{{ forloop.index }}</span>
+
+            {% if thumbnail != blank %}
+              <img
+                src="{{ thumbnail | escape }}"
+                alt="{{ bird.commonName | escape }}"
+                class="image image-dither bwf-thumb"
+              >
+            {% else %}
+              <span class="bwf-thumb"></span>
+            {% endif %}
+
+            <div style="min-width: 0;">
+              <span class="bwf-species" data-clamp="1">
+                {{ bird.commonName | escape }}
+              </span>
+              <span class="bwf-scientific" data-clamp="1">
+                {{ bird.scientificName | escape }}
+              </span>
+              <div class="bwf-bar" style="width: {{ bar_width }}%;"></div>
+            </div>
+
+            <div class="bwf-count">
+              {{ count }}×
+              <span class="bwf-share">{{ share }}%</span>
+            </div>
+          </div>
+        {% else %}
+          <span class="bwf-small">
+            {% render 'bw_text', language: language, key: 'empty_period' %}
+          </span>
+        {% endfor %}
+
+        <span class="bwf-small">
+          {% render 'bw_text', language: language, key: 'count_note' %}
+        </span>
+      </div>
+    </div>
+  {% else %}
+    <span class="description">
+      {% render 'bw_text', language: language, key: 'error' %}
+    </span>
+  {% endif %}
+</div>
+
+<div class="title_bar">
+  <span class="title">
+    BirdWeather · {{ settings.station_name | escape }}
+  </span>
+  <span class="instance">{{ period_label | escape }}</span>
+</div>
