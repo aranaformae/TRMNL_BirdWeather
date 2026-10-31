@@ -3,22 +3,22 @@
 
   {%- case language -%}
     {%- when 'en' -%}
-      {%- assign words = 'LAST HEARD|Species|Detections|Confidence|RECENT|TOP SPECIES|TOTALS|Day|Week|Month|All|No bird detections yet.|No detections in this period.|BirdWeather unavailable. Check your station token.|Counts are acoustic detections.|Bird detections|Independent of the selected statistics period.' | split: '|' -%}
+      {%- assign words = 'LAST HEARD|Species|Detections|Confidence|RECENT|TOP SPECIES|TOTALS|Day|Week|Month|All|No bird detections yet.|No detections in this period.|BirdWeather unavailable. Check your station ID.|Counts are acoustic detections.|Bird detections|Independent of the selected statistics period.' | split: '|' -%}
 
     {%- when 'de' -%}
-      {%- assign words = 'ZULETZT GEHÖRT|Arten|Erkennungen|Konfidenz|ZULETZT|HÄUFIGSTE ARTEN|GESAMT|Tag|Woche|Monat|Alle|Noch keine Vogelerkennungen.|Keine Erkennungen in diesem Zeitraum.|BirdWeather nicht verfügbar. Station-Token prüfen.|Gezählt werden akustische Erkennungen.|Vogelerkennungen|Unabhängig vom gewählten Statistikzeitraum.' | split: '|' -%}
+      {%- assign words = 'ZULETZT GEHÖRT|Arten|Erkennungen|Konfidenz|ZULETZT|HÄUFIGSTE ARTEN|GESAMT|Tag|Woche|Monat|Alle|Noch keine Vogelerkennungen.|Keine Erkennungen in diesem Zeitraum.|BirdWeather nicht verfügbar. Stations-ID prüfen.|Gezählt werden akustische Erkennungen.|Vogelerkennungen|Unabhängig vom gewählten Statistikzeitraum.' | split: '|' -%}
 
     {%- when 'fr' -%}
-      {%- assign words = 'DERNIER OISEAU ENTENDU|Espèces|Détections|Confiance|RÉCENTES|ESPÈCES DOMINANTES|TOTAUX|Jour|Semaine|Mois|Tout|Aucune détection pour le moment.|Aucune détection sur cette période.|BirdWeather indisponible. Vérifiez le jeton de la station.|Les nombres représentent des détections acoustiques.|Détections d’oiseaux|Indépendamment de la période statistique choisie.' | split: '|' -%}
+      {%- assign words = 'DERNIER OISEAU ENTENDU|Espèces|Détections|Confiance|RÉCENTES|ESPÈCES DOMINANTES|TOTAUX|Jour|Semaine|Mois|Tout|Aucune détection pour le moment.|Aucune détection sur cette période.|BirdWeather indisponible. Vérifiez l’identifiant de la station.|Les nombres représentent des détections acoustiques.|Détections d’oiseaux|Indépendamment de la période statistique choisie.' | split: '|' -%}
 
     {%- when 'es' -%}
-      {%- assign words = 'ÚLTIMA AVE OÍDA|Especies|Detecciones|Confianza|RECIENTES|ESPECIES PRINCIPALES|TOTALES|Día|Semana|Mes|Todo|Todavía no hay detecciones.|Sin detecciones en este periodo.|BirdWeather no disponible. Comprueba el token de la estación.|Las cifras son detecciones acústicas.|Detecciones de aves|Independientemente del periodo estadístico seleccionado.' | split: '|' -%}
+      {%- assign words = 'ÚLTIMA AVE OÍDA|Especies|Detecciones|Confianza|RECIENTES|ESPECIES PRINCIPALES|TOTALES|Día|Semana|Mes|Todo|Todavía no hay detecciones.|Sin detecciones en este periodo.|BirdWeather no disponible. Comprueba el ID de la estación.|Las cifras son detecciones acústicas.|Detecciones de aves|Independientemente del periodo estadístico seleccionado.' | split: '|' -%}
 
     {%- when 'it' -%}
-      {%- assign words = 'ULTIMO UCCELLO SENTITO|Specie|Rilevamenti|Affidabilità|RECENTI|SPECIE PRINCIPALI|TOTALI|Giorno|Settimana|Mese|Tutto|Nessun rilevamento per ora.|Nessun rilevamento in questo periodo.|BirdWeather non disponibile. Controlla il token della stazione.|I numeri indicano rilevamenti acustici.|Rilevamenti di uccelli|Indipendentemente dal periodo statistico selezionato.' | split: '|' -%}
+      {%- assign words = 'ULTIMO UCCELLO SENTITO|Specie|Rilevamenti|Affidabilità|RECENTI|SPECIE PRINCIPALI|TOTALI|Giorno|Settimana|Mese|Tutto|Nessun rilevamento per ora.|Nessun rilevamento in questo periodo.|BirdWeather non disponibile. Controlla l’ID della stazione.|I numeri indicano rilevamenti acustici.|Rilevamenti di uccelli|Indipendentemente dal periodo statistico selezionato.' | split: '|' -%}
 
     {%- else -%}
-      {%- assign words = 'LAATST GEHOORD|Soorten|Detecties|Zekerheid|RECENT|TOPSOORTEN|TOTALEN|Dag|Week|Maand|Alles|Nog geen vogeldetecties.|Geen detecties in deze periode.|BirdWeather niet beschikbaar. Controleer je stationtoken.|Aantallen zijn geluidsdetecties.|Vogeldetecties|Los van de gekozen statistiekperiode.' | split: '|' -%}
+      {%- assign words = 'LAATST GEHOORD|Soorten|Detecties|Zekerheid|RECENT|TOPSOORTEN|TOTALEN|Dag|Week|Maand|Alles|Nog geen vogeldetecties.|Geen detecties in deze periode.|BirdWeather niet beschikbaar. Controleer je station-ID.|Aantallen zijn geluidsdetecties.|Vogeldetecties|Los van de gekozen statistiekperiode.' | split: '|' -%}
   {%- endcase -%}
 
   {%- case key -%}
@@ -41,6 +41,7 @@
     {%- when 'recent_note' -%}{{- words[16] -}}
   {%- endcase -%}
 {% endtemplate %}
+
 
 {% template bw_screen %}
 {% assign settings = trmnl.plugin_settings.custom_fields_values %}
@@ -69,9 +70,15 @@
     min-height: 0;
   }
 
+  .bw-stage,
+  .bw-stage * {
+    box-sizing: border-box;
+  }
+
   .bw-board {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     gap: 8px;
     width: 100%;
     height: 100%;
@@ -83,11 +90,13 @@
   .bw-ranking {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     gap: 7px;
     min-width: 0;
   }
 
   .bw-heading {
+    display: block;
     font-size: 12px;
     font-weight: 700;
     line-height: 1.2;
@@ -98,6 +107,7 @@
     grid-template-columns: 60px minmax(0, 1fr);
     align-items: center;
     gap: 9px;
+    min-width: 0;
   }
 
   .bw-photo {
@@ -110,11 +120,17 @@
   .bw-details {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     gap: 4px;
     min-width: 0;
   }
 
   .bw-name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    width: 100%;
     font-size: 19px;
     font-weight: 700;
     line-height: 1.1;
@@ -122,6 +138,7 @@
   }
 
   .bw-small {
+    display: block;
     font-size: 11px;
     line-height: 1.2;
   }
@@ -129,6 +146,12 @@
   .bw-scientific,
   .bw-confidence {
     display: none;
+  }
+
+  .bw-scientific {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .bw-totals {
@@ -140,6 +163,7 @@
   }
 
   .bw-number {
+    display: block;
     font-size: 25px;
     font-weight: 700;
     line-height: 1.05;
@@ -153,7 +177,10 @@
   .bw-list {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     gap: 0;
+    width: 100%;
+    min-width: 0;
   }
 
   .bw-row {
@@ -161,12 +188,23 @@
     grid-template-columns: 16px minmax(0, 1fr) 48px;
     align-items: center;
     gap: 7px;
+    width: 100%;
     padding: 4px 0;
     border-bottom: 1px solid black;
   }
 
-  .bw-species {
+  .bw-species-info {
     min-width: 0;
+    width: 100%;
+  }
+
+  .bw-species {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-size: 14px;
     font-weight: 600;
     line-height: 1.15;
@@ -192,6 +230,13 @@
     display: none;
   }
 
+  .bw-latin {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .bw-row.bw-after3,
   .bw-row.bw-after5,
   .bw-row.bw-after7 {
@@ -202,6 +247,7 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    min-width: 0;
   }
 
   .bw-recent-row {
@@ -213,6 +259,19 @@
     line-height: 1.2;
   }
 
+  .bw-recent-name {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bw-recent-confidence {
+    text-align: right;
+    white-space: nowrap;
+  }
+
   .bw-footer-name {
     min-width: 0;
     overflow: hidden;
@@ -220,7 +279,7 @@
     white-space: nowrap;
   }
 
-  /* Hoge, smalle vlakken: bijvoorbeeld Quadrant in portret. */
+  /* Hoge compacte vlakken: top 3. */
   @container bwpanel (min-height: 300px) {
     .bw-ranking {
       display: flex;
@@ -235,7 +294,7 @@
     }
   }
 
-  /* Meer verticale ruimte: grotere foto en vijf topsoorten. */
+  /* Meer hoogte: grotere foto en top 5. */
   @container bwpanel (min-height: 410px) {
     .bw-hero {
       grid-template-columns: 1fr;
@@ -264,7 +323,7 @@
     }
   }
 
-  /* Hoge halve schermen krijgen zeven topsoorten. */
+  /* Hoge halve schermen: top 7. */
   @container bwpanel (min-height: 590px) {
     .bw-photo {
       height: 150px;
@@ -297,12 +356,12 @@
     }
   }
 
-  /* Brede, lage vlakken: Half horizontal op OG. */
+  /* Brede vlakken: twee kolommen, bovenaan uitgelijnd. */
   @container bwpanel (min-width: 600px) {
     .bw-board {
       display: grid;
       grid-template-columns: 1fr 1.1fr;
-      align-content: center;
+      align-content: start;
       align-items: start;
       gap: 18px;
     }
@@ -320,7 +379,7 @@
     }
   }
 
-  /* Brede vlakken met genoeg hoogte: Full OG en X-portret. */
+  /* Full OG en ruime halve portretvlakken. */
   @container bwpanel (min-width: 600px) and (min-height: 340px) {
     .bw-hero {
       grid-template-columns: 1fr;
@@ -353,7 +412,7 @@
     }
   }
 
-  /* Brede X-weergaven: rijkere informatie en grotere tekst. */
+  /* Brede X-schermen. */
   @container bwpanel (min-width: 950px) and (min-height: 280px) {
     .bw-board {
       gap: 26px;
@@ -419,7 +478,7 @@
     }
   }
 
-  /* Full X in landschap. */
+  /* Full X landschap. */
   @container bwpanel (min-width: 950px) and (min-height: 500px) {
     .bw-full .bw-hero {
       grid-template-columns: 1fr;
@@ -465,125 +524,201 @@
     }
   }
 
-  /* Full X in portret: grote vogelkaart boven de top 10. */
-  @container bwpanel (min-width: 600px) and (min-height: 850px) {
-    .bw-full {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .bw-full .bw-main {
-      gap: 14px;
-    }
-
-    .bw-full .bw-hero {
-      grid-template-columns: 240px minmax(0, 1fr);
-      gap: 24px;
-    }
-
-    .bw-full .bw-photo {
-      width: 240px;
-      height: 220px;
-    }
-
-    .bw-full .bw-name {
-      font-size: 36px;
-    }
-
-    .bw-full .bw-heading {
-      font-size: 17px;
-    }
-
-    .bw-full .bw-small {
-      font-size: 16px;
-    }
-
-    .bw-full .bw-number {
-      font-size: 42px;
-    }
-
-    .bw-full .bw-ranking {
-      gap: 12px;
-    }
-
-    .bw-full .bw-row {
-      grid-template-columns: 26px 48px minmax(0, 1fr) 74px;
-      gap: 12px;
-      padding: 8px 0;
-    }
-
-    .bw-full .bw-thumb {
-      display: block;
-      width: 48px;
-      height: 42px;
-      object-fit: contain;
-    }
-
-    .bw-full .bw-species,
-    .bw-full .bw-count {
-      font-size: 22px;
-    }
-
-    .bw-full .bw-latin {
-      display: block;
-      font-size: 13px;
+  /* Smalle vlakken: twee regels voor lange soortnamen. */
+  @container bwpanel (max-width: 599px) {
+    .bw-species {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      white-space: normal;
+      overflow: hidden;
       line-height: 1.2;
-    }
-
-    .bw-full .bw-share {
-      display: block;
-      font-size: 13px;
-      font-weight: 400;
-    }
-
-    .bw-full .bw-bar {
-      display: block;
-      height: 4px;
-      margin-top: 5px;
-      background: black;
-    }
-
-    .bw-full .bw-recent {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      padding-top: 10px;
-      border-top: 1px solid black;
-    }
-
-    .bw-full .bw-recent-list {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px 20px;
-    }
-
-    .bw-full .bw-recent-row {
-      font-size: 14px;
-    }
-
-    .bw-full .bw-row.bw-after7 {
-      display: grid;
+      overflow-wrap: anywhere;
     }
   }
 
-  /* Hoge halve portretvlakken mogen alle tien soorten tonen. */
+  /* Hoog, smal portretvlak: top 10. */
   @container bwpanel (min-height: 850px) and (max-width: 599px) {
     .bw-row.bw-after7 {
       display: grid;
     }
 
     .bw-photo {
-      height: 190px;
+      height: 150px;
     }
 
     .bw-board {
-      gap: 18px;
+      gap: 14px;
     }
 
     .bw-row {
-      padding: 8px 0;
+      padding: 5px 0;
+    }
+  }
+
+  /* Half horizontal X landschap: compact houden. */
+  @container bwpanel (min-width: 950px) and (max-height: 400px) {
+    .bw-horizontal {
+      gap: 20px;
+    }
+
+    .bw-horizontal .bw-main,
+    .bw-horizontal .bw-ranking {
+      gap: 5px;
+    }
+
+    .bw-horizontal .bw-heading {
+      font-size: 12px;
+    }
+
+    .bw-horizontal .bw-hero {
+      grid-template-columns: 85px minmax(0, 1fr);
+      gap: 10px;
+    }
+
+    .bw-horizontal .bw-photo {
+      width: 85px;
+      height: 75px;
+    }
+
+    .bw-horizontal .bw-name {
+      font-size: 23px;
+    }
+
+    .bw-horizontal .bw-number {
+      font-size: 28px;
+    }
+
+    .bw-horizontal .bw-row {
+      padding: 3px 0;
+    }
+
+    .bw-horizontal .bw-species,
+    .bw-horizontal .bw-count {
+      font-size: 15px;
+    }
+
+    .bw-horizontal .bw-share {
+      display: none;
+    }
+
+    .bw-horizontal .bw-recent {
+      gap: 4px;
+      padding-top: 5px;
+    }
+
+    .bw-horizontal .bw-recent-row {
+      font-size: 11px;
+    }
+
+    .bw-horizontal .bw-note {
+      display: none;
+    }
+  }
+
+  /* Full X portret: volledige breedte, compacte top 10. */
+  @container bwpanel (min-width: 600px) and (min-height: 850px) {
+    .bw-full {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 16px;
+    }
+
+    .bw-full .bw-main,
+    .bw-full .bw-ranking {
+      width: 100%;
+      gap: 8px;
+    }
+
+    .bw-full .bw-hero {
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    .bw-full .bw-photo {
+      width: 180px;
+      height: 145px;
+    }
+
+    .bw-full .bw-name {
+      font-size: 30px;
+    }
+
+    .bw-full .bw-heading {
+      font-size: 15px;
+    }
+
+    .bw-full .bw-small {
+      font-size: 13px;
+    }
+
+    .bw-full .bw-number {
+      font-size: 34px;
+    }
+
+    .bw-full .bw-totals {
+      padding-top: 7px;
+    }
+
+    .bw-full .bw-recent {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding-top: 7px;
+      border-top: 1px solid black;
+    }
+
+    .bw-full .bw-recent-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 18px;
+    }
+
+    .bw-full .bw-recent-row {
+      font-size: 12px;
+    }
+
+    .bw-full .bw-row {
+      grid-template-columns: 22px 38px minmax(0, 1fr) 65px;
+      gap: 9px;
+      padding: 5px 0;
+    }
+
+    .bw-full .bw-thumb {
+      display: block;
+      width: 38px;
+      height: 34px;
+      object-fit: contain;
+    }
+
+    .bw-full .bw-species,
+    .bw-full .bw-count {
+      font-size: 18px;
+    }
+
+    .bw-full .bw-latin {
+      display: block;
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
+    .bw-full .bw-share {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+    }
+
+    .bw-full .bw-bar {
+      display: block;
+      height: 3px;
+      margin-top: 3px;
+      background: black;
+    }
+
+    .bw-full .bw-row.bw-after7 {
+      display: grid;
     }
   }
 </style>
@@ -592,7 +727,7 @@
   <div class="bw-stage">
     {% if latest_data.success == true and species_data.success == true and stats_data.success == true %}
 
-      <div class="bw-board bw-{{ view }}">
+      <div class="bw-board bw-{{ view | escape }}">
         <div class="bw-main">
           <span class="bw-heading">
             {% render 'bw_text', language: language, key: 'last' %}
@@ -616,11 +751,11 @@
               {% endif %}
 
               <div class="bw-details">
-                <span class="bw-name" data-clamp="2">
+                <span class="bw-name">
                   {{ last.species.commonName | escape }}
                 </span>
 
-                <span class="bw-small bw-scientific" data-clamp="1">
+                <span class="bw-small bw-scientific">
                   {{ last.species.scientificName | escape }}
                 </span>
 
@@ -677,11 +812,11 @@
                     {{ detection.timestamp | date: "%H:%M" }}
                   </span>
 
-                  <span data-clamp="1">
+                  <span class="bw-recent-name">
                     {{ detection.species.commonName | escape }}
                   </span>
 
-                  <span style="text-align: right;">
+                  <span class="bw-recent-confidence">
                     {% if detection.confidence != nil %}
                       {{ detection.confidence | times: 100 | round }}%
                     {% else %}
@@ -734,16 +869,19 @@
                   <span class="bw-thumb"></span>
                 {% endif %}
 
-                <div style="min-width: 0;">
-                  <span class="bw-species" data-clamp="1">
+                <div class="bw-species-info">
+                  <span class="bw-species">
                     {{ bird.commonName | escape }}
                   </span>
 
-                  <span class="bw-latin" data-clamp="1">
+                  <span class="bw-latin">
                     {{ bird.scientificName | escape }}
                   </span>
 
-                  <div class="bw-bar" style="width: {{ bar }}%;"></div>
+                  <div
+                    class="bw-bar"
+                    style="width: {{ bar }}%;"
+                  ></div>
                 </div>
 
                 <div class="bw-count">
